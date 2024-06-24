@@ -1,6 +1,7 @@
 package com.erick.challenge.api.services;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,10 @@ public class UserService {
 		objDTO.setCreatedAt(LocalDate.now());
 		User newUser = new User(objDTO);
 		return userRepository.save(newUser);
+	}
+
+	public List<User> findAll() {
+		return userRepository.findAll();
 	}
 
 }
