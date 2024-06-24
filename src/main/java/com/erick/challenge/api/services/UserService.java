@@ -35,4 +35,11 @@ public class UserService {
 		return obj.get();
 	}
 
+	public User update(UUID id, UserDTO objDTO) {
+		objDTO.setId(id);
+		User updatedObj = findById(id);
+		updatedObj = new User(objDTO);
+		return userRepository.save(updatedObj);
+	}
+
 }
