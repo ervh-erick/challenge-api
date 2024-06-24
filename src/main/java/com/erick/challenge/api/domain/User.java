@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import com.erick.challenge.api.domain.dto.UserDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,6 +23,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "users")
 public class User {
+
+	public User(UserDTO objDTO) {
+		this.id = objDTO.getId();
+		this.firstName = objDTO.getFirstName();
+		this.lastName = objDTO.getLastName();
+		this.email = objDTO.getEmail();
+		this.birthday = objDTO.getBirthday();
+		this.login = objDTO.getLogin();
+		this.password = objDTO.getPassword();
+		this.phone = objDTO.getPhone();
+		this.createdAt = objDTO.getCreatedAt();
+		this.lastLogin = objDTO.getLastLogin();
+		this.cars = objDTO.getCars();
+
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
