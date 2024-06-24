@@ -41,5 +41,9 @@ public class UserService {
 		updatedObj = new User(objDTO);
 		return userRepository.save(updatedObj);
 	}
+	
+	public void delete(UUID id) {
+		userRepository.deleteById(id);
+	}
 
 }
