@@ -35,8 +35,6 @@ public class User {
 		this.phone = objDTO.getPhone();
 		this.createdAt = objDTO.getCreatedAt();
 		this.lastLogin = objDTO.getLastLogin();
-		this.cars = objDTO.getCars();
-
 	}
 
 	@Id
@@ -69,8 +67,4 @@ public class User {
 
 	@Column(name = "last_login")
 	private LocalDate lastLogin;
-
-	@OneToMany(mappedBy = "user")
-	private List<Car> cars;
-
 }
