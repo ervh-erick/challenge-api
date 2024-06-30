@@ -16,15 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.erick.challenge.api.config.UserAuthenticationProvider;
 import com.erick.challenge.api.domain.User;
-import com.erick.challenge.api.domain.dto.CredentialsDTO;
 import com.erick.challenge.api.domain.dto.UserDTO;
 import com.erick.challenge.api.services.UserService;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @AllArgsConstructor
@@ -32,7 +29,8 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
 	UserService userService;
-    @GetMapping
+
+	@GetMapping
 	public ResponseEntity<List<UserDTO>> findAll() {
 		List<User> list = userService.findAll();
 		List<UserDTO> listDTO = list.stream().map(obj -> new UserDTO(obj)).collect(Collectors.toList());
@@ -50,18 +48,18 @@ public class UserController {
 		User obj = userService.update(id, objDTO);
 		return ResponseEntity.ok().body(new UserDTO(obj));
 	}
-	
+
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<UserDTO> delete(@PathVariable UUID id) {
 		userService.delete(id);
 		return ResponseEntity.noContent().build();
 	}
-    
-    @PostMapping
+
+	@PostMapping
 	public ResponseEntity<UserDTO> create(@RequestBody @Valid UserDTO objDTO) {
 		User newObj = userService.create(objDTO);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newObj.getId()).toUri();
 		return ResponseEntity.created(uri).body(new UserDTO(newObj));
 	}
-   
+
 }

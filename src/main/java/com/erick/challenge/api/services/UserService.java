@@ -30,7 +30,7 @@ public class UserService {
 
 	UserRepository userRepository;
 	CarRepository carRepository;
-    private final PasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
 
 	public User create(UserDTO objDTO) {
 		objDTO.setId(null);
@@ -55,34 +55,35 @@ public class UserService {
 		updatedObj = new User(objDTO);
 		return userRepository.save(updatedObj);
 	}
-	
+
 	public void delete(UUID id) {
 		userRepository.deleteById(id);
 	}
 
 	public UserDTO findByLogin(String login) {
-		User user =  userRepository.findByLogin(login).get();
+		User user = userRepository.findByLogin(login).get();
 		return new UserDTO(user);
 	}
 
 	public UserDTO login(CredentialsDTO credentialsDto) {
-		User user = userRepository.findByLogin(credentialsDto.login()).orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
-        if (passwordEncoder.matches(CharBuffer.wrap(credentialsDto.password()), user.getPassword())) {
-        	user.setLastLogin(LocalDate.now());
-        	return new UserDTO(userRepository.save(user));
-        }
-        throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
-    }
-	
+		User user = userRepository.findByLogin(credentialsDto.login())
+				.orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
+		if (passwordEncoder.matches(CharBuffer.wrap(credentialsDto.password()), user.getPassword())) {
+			user.setLastLogin(LocalDate.now());
+			return new UserDTO(userRepository.save(user));
+		}
+		throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
+	}
+
 	public UUID getIdUserByContext() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		return auth!=null ? ((UserDTO)auth.getPrincipal()).getId() : UUID.fromString("");
+		return auth != null ? ((UserDTO) auth.getPrincipal()).getId() : UUID.fromString("");
 	}
 
 	public UserDTO getMe(String login) {
-		User user =  userRepository.findByLogin(login).get();
+		User user = userRepository.findByLogin(login).get();
 		UserDTO userDTO = new UserDTO(user);
-		userDTO.setCars(carRepository.findCarByUserId(userDTO.getId()).get());
+		userDTO.setCars(carRepository.findCarByUserId(userDTO.getId()));
 		return userDTO;
 	}
 }

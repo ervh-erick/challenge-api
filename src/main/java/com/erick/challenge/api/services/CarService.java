@@ -1,5 +1,7 @@
 package com.erick.challenge.api.services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.erick.challenge.api.domain.Car;
@@ -20,6 +22,10 @@ public class CarService {
 		objDTO.setUser(userService.findById(userService.getIdUserByContext()));
 		Car newCar = new Car(objDTO);
 		return carRepository.save(newCar);
+	}
+
+	public List<Car> findAll() {
+		return carRepository.findCarByUserId(userService.getIdUserByContext());
 	}
 
 }
