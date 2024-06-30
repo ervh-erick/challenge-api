@@ -1,12 +1,17 @@
 package com.erick.challenge.api.domain;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.erick.challenge.api.domain.dto.CarDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,11 +29,21 @@ import lombok.NoArgsConstructor;
 @Table(name = "car")
 public class Car {
 
+	public Car(CarDTO carDTO) {
+		this.id = carDTO.getId();
+		this.year = carDTO.getYear();
+		this.licensePlate = carDTO.getLicensePlate();
+		this.model = carDTO.getModel();
+		this.color = carDTO.getColor();
+		this.user = carDTO.getUser();
+
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
 
-	@Column(name = "first_name", nullable = false)
+	@Column(name = "yeer", nullable = false)
 	private int year;
 
 	@Column(name = "license_plate", nullable = false)
@@ -40,9 +55,10 @@ public class Car {
 	@Column(name = "color", nullable = false)
 	private String color;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_user")
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
 	private User user;
 
 }

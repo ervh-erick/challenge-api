@@ -37,8 +37,7 @@ public class AuthController {
 	@GetMapping(value = "/me")
 	public ResponseEntity<UserDTO> getUserLoggedin() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UserDTO userDTO = userService.findByLogin(((UserDTO) auth.getPrincipal()).getLogin());
+		UserDTO userDTO = userService.getMe(((UserDTO) auth.getPrincipal()).getLogin());
 		return ResponseEntity.ok(userDTO);
 	}
-	
 }
