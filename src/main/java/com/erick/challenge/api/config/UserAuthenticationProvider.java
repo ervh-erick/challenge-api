@@ -4,12 +4,19 @@ package com.erick.challenge.api.config;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.authentication.logout.DelegatingServerLogoutHandler;
+import org.springframework.security.web.server.authentication.logout.SecurityContextServerLogoutHandler;
+import org.springframework.security.web.server.authentication.logout.WebSessionServerLogoutHandler;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -20,7 +27,7 @@ import com.erick.challenge.api.services.UserService;
 
 import jakarta.annotation.PostConstruct;
 
-@Component
+@Configuration
 public class UserAuthenticationProvider {
 
     @Value("${api.security.token.secret}")
@@ -54,6 +61,7 @@ public class UserAuthenticationProvider {
                 .withSubject(user.getLogin())
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
+                .withClaim("id", user.getId().toString())
                 .withClaim("firstName", user.getFirstName())
                 .withClaim("lastName", user.getLastName())
                 .sign(algorithm);
@@ -67,7 +75,10 @@ public class UserAuthenticationProvider {
 
         DecodedJWT decoded = verifier.verify(token);
 
-        UserDTO user = new UserDTO(decoded.getSubject(), decoded.getClaim("firstName").asString(), decoded.getClaim("lastName").asString());
+        UserDTO user = new UserDTO(UUID.fromString(decoded.getClaim("id").asString()), 
+        						   decoded.getSubject(), 
+        						   decoded.getClaim("firstName").asString(), 
+        						   decoded.getClaim("lastName").asString());
 
         return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
     }
@@ -84,5 +95,18 @@ public class UserAuthenticationProvider {
 
         return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
     }
+    /*
+    @Bean
+    SecurityWebFilterChain logout(ServerHttpSecurity http) throws Exception {
+        DelegatingServerLogoutHandler logoutHandler = new DelegatingServerLogoutHandler(
+                new SecurityContextServerLogoutHandler(), new WebSessionServerLogoutHandler()
+        );
+
+        http
+            .authorizeExchange((exchange) -> exchange.anyExchange().authenticated())
+            .logout((logout) -> logout.logoutHandler(logoutHandler));
+
+        return http.build();
+    }*/
 
 }

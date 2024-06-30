@@ -1,12 +1,17 @@
 package com.erick.challenge.api.services;
 
+import java.lang.reflect.Array;
 import java.nio.CharBuffer;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.el.parser.AstListData;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +19,7 @@ import com.erick.challenge.api.domain.User;
 import com.erick.challenge.api.domain.dto.CredentialsDTO;
 import com.erick.challenge.api.domain.dto.UserDTO;
 import com.erick.challenge.api.exceptions.AppException;
+import com.erick.challenge.api.repositories.CarRepository;
 import com.erick.challenge.api.repositories.UserRepository;
 
 import lombok.AllArgsConstructor;
@@ -23,6 +29,7 @@ import lombok.AllArgsConstructor;
 public class UserService {
 
 	UserRepository userRepository;
+	CarRepository carRepository;
     private final PasswordEncoder passwordEncoder;
 
 	public User create(UserDTO objDTO) {
@@ -66,5 +73,16 @@ public class UserService {
         }
         throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
     }
+	
+	public UUID getIdUserByContext() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return auth!=null ? ((UserDTO)auth.getPrincipal()).getId() : UUID.fromString("");
+	}
 
+	public UserDTO getMe(String login) {
+		User user =  userRepository.findByLogin(login).get();
+		UserDTO userDTO = new UserDTO(user);
+		userDTO.setCars(carRepository.findCarByUserId(userDTO.getId()).get());
+		return userDTO;
+	}
 }

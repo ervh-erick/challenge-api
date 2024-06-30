@@ -1,5 +1,6 @@
 package com.erick.challenge.api.domain;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
