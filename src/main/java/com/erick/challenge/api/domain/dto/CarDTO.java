@@ -21,7 +21,7 @@ public class CarDTO {
 		this.model = newObj.getModel();
 		this.licensePlate = newObj.getLicensePlate();
 	}
-	
+
 	private UUID id;
 	private int year;
 	private String licensePlate;
