@@ -63,4 +63,5 @@ public class UserController {
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newObj.getId()).toUri();
 		return ResponseEntity.created(uri).body(new UserDTO(newObj));
 	}
+   
 }

@@ -1,6 +1,7 @@
 package com.erick.challenge.api.domain.dto;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
