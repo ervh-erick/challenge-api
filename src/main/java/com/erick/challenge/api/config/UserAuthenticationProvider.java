@@ -1,8 +1,9 @@
 package com.erick.challenge.api.config;
 
 
-import jakarta.annotation.PostConstruct;
-import lombok.AllArgsConstructor;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,9 +18,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.erick.challenge.api.domain.dto.UserDTO;
 import com.erick.challenge.api.services.UserService;
 
-import java.util.Base64;
-import java.util.Collections;
-import java.util.Date;
+import jakarta.annotation.PostConstruct;
 
 @Component
 public class UserAuthenticationProvider {

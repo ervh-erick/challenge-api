@@ -60,12 +60,10 @@ public class UserService {
 
 	public UserDTO login(CredentialsDTO credentialsDto) {
 		User user = userRepository.findByLogin(credentialsDto.login()).orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
-
-
         if (passwordEncoder.matches(CharBuffer.wrap(credentialsDto.password()), user.getPassword())) {
-            return new UserDTO(user);
+        	user.setLastLogin(LocalDate.now());
+        	return new UserDTO(userRepository.save(user));
         }
-        
         throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
     }
 
