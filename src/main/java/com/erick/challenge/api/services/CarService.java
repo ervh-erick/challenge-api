@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.erick.challenge.api.domain.Car;
 import com.erick.challenge.api.domain.User;
 import com.erick.challenge.api.domain.dto.CarDTO;
+import com.erick.challenge.api.domain.dto.UserDTO;
 import com.erick.challenge.api.repositories.CarRepository;
 
 import lombok.AllArgsConstructor;
@@ -38,6 +39,13 @@ public class CarService {
 	
 	public void delete(UUID id) {
 		carRepository.deleteById(id);
+	}
+	
+	public Car update(UUID id, CarDTO objDTO) {
+		objDTO.setId(id);
+		Car updatedObj = findById(id);
+		updatedObj = new Car(objDTO);
+		return carRepository.save(updatedObj);
 	}
 
 	
