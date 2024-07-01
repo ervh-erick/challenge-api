@@ -1,6 +1,7 @@
 package com.erick.challenge.api.domain.dto;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,7 +48,9 @@ public class UserDTO {
 		this.cars = cars;
 	}
 
-	public UserDTO(String login, String firstName, String lastName) {
+	public UserDTO(UUID id,  String login, String firstName, String lastName) {
+		super();
+		this.id = id;
 		this.login = login;
 		this.firstName = firstName;
 		this.lastName = lastName;
