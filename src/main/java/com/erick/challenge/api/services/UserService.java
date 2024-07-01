@@ -1,14 +1,11 @@
 package com.erick.challenge.api.services;
 
-import java.lang.reflect.Array;
 import java.nio.CharBuffer;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.apache.el.parser.AstListData;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -80,6 +77,7 @@ public class UserService {
 		return auth != null ? ((UserDTO) auth.getPrincipal()).getId() : UUID.fromString("");
 	}
 
+	
 	public UserDTO getMe(String login) {
 		User user = userRepository.findByLogin(login).get();
 		UserDTO userDTO = new UserDTO(user);
