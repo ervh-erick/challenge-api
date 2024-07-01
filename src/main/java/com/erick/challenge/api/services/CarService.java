@@ -35,6 +35,10 @@ public class CarService {
 		Optional<Car> obj = carRepository.findByIdAndByUserId(id, userService.getIdUserByContext());
 		return obj.get();
 	}
+	
+	public void delete(UUID id) {
+		carRepository.deleteById(id);
+	}
 
 	
 }
