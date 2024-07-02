@@ -45,6 +45,8 @@ public class CarService {
 		objDTO.setId(id);
 		Car updatedObj = findById(id);
 		updatedObj = new Car(objDTO);
+		User user = userService.findById(userService.getIdUserByContext());
+		updatedObj.setUser(user);
 		return carRepository.save(updatedObj);
 	}
 

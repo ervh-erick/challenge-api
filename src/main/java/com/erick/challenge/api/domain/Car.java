@@ -43,7 +43,7 @@ public class Car {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
 
-	@Column(name = "yeer", nullable = false)
+	@Column(name = "yaer", nullable = false)
 	private int year;
 
 	@Column(name = "license_plate", nullable = false)
