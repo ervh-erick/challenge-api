@@ -21,7 +21,16 @@ public class SecurityConfig {
 
     private final UserAuthenticationEntryPoint userAuthenticationEntryPoint;
     private final UserAuthenticationProvider userAuthenticationProvider;
-
+    private static final String[] AUTH_WHITELIST = {
+    		"/api/v1/auth/**",
+    		"/v3/api-docs/**",
+    		"/configuration/ui", 
+    		"/swagger-resources/**", 
+    		"/swagger-ui.html", 
+    		"/webjars/**", 
+    		"/swagger-ui/**"    
+    		};
+    
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -33,6 +42,7 @@ public class SecurityConfig {
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(HttpMethod.POST, "api/signin", "api/users").permitAll()
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
 						.requestMatchers(toH2Console()).permitAll()
                         .anyRequest().authenticated())
         ;
