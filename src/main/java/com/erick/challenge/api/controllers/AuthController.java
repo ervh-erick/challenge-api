@@ -20,13 +20,12 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(value = "/api")
 public class AuthController {
 
 	private final UserService userService;
 	private final UserAuthenticationProvider userAuthenticationProvider;
 
-	@PostMapping(value = "/signin")
+	@PostMapping(value = "api/signin")
 	public ResponseEntity<UserDTO> login(@RequestBody @Valid CredentialsDTO credentialsDto) {
 		UserDTO userDto = userService.login(credentialsDto);
 		userDto.setToken(userAuthenticationProvider.createToken(userDto));
