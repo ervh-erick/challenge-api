@@ -1,6 +1,5 @@
 package com.erick.challenge.api.domain;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 import org.hibernate.annotations.OnDelete;

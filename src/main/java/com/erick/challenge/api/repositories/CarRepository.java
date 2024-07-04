@@ -17,4 +17,6 @@ public interface CarRepository extends JpaRepository<Car, UUID> {
 	@Query("select c from Car c where c.user.id = :pUserId and c.id = :pCarId" )
     Optional<Car> findByIdAndByUserId( @Param("pCarId") UUID pCarId, @Param("pUserId") UUID pUserId);
 
+	Optional<Car> findByLicensePlate(String licensePlate);
+
 }
