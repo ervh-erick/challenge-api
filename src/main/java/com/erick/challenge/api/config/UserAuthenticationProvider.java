@@ -1,6 +1,5 @@
 package com.erick.challenge.api.config;
 
-
 import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
@@ -8,20 +7,15 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.authentication.logout.DelegatingServerLogoutHandler;
-import org.springframework.security.web.server.authentication.logout.SecurityContextServerLogoutHandler;
-import org.springframework.security.web.server.authentication.logout.WebSessionServerLogoutHandler;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.erick.challenge.api.domain.User;
 import com.erick.challenge.api.domain.dto.UserDTO;
 import com.erick.challenge.api.services.UserService;
 
@@ -30,83 +24,58 @@ import jakarta.annotation.PostConstruct;
 @Configuration
 public class UserAuthenticationProvider {
 
-    @Value("${api.security.token.secret}")
-    private String secretKey;
-    
-    @Value("${api.security.token.expiration}")
-    private String expiration;
-    
-    @Autowired
-    private UserService userService;
+	@Value("${api.security.token.secret}")
+	private String secretKey;
 
-    @PostConstruct
-    protected void init() {
-        // this is to avoid having the raw secret key available in the JVM
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-    }
+	@Value("${api.security.token.expiration}")
+	private String expiration;
 
-    public String createToken(UserDTO user) {
-        Date now = new Date();
-        int expirationToken = 3600000; // 1 hour
-       
+	@Autowired
+	private UserService userService;
 
-        try {
-        	expirationToken = Integer.parseInt(expiration);
-        }catch (NumberFormatException e) {}
-        
-        Date validity = new Date(now.getTime() + expirationToken); 
+	@PostConstruct
+	protected void init() {
+		// this is to avoid having the raw secret key available in the JVM
+		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+	}
 
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
-        return JWT.create()
-                .withSubject(user.getLogin())
-                .withIssuedAt(now)
-                .withExpiresAt(validity)
-                .withClaim("id", user.getId().toString())
-                .withClaim("firstName", user.getFirstName())
-                .withClaim("lastName", user.getLastName())
-                .sign(algorithm);
-    }
+	public String createToken(UserDTO user) {
+		Date now = new Date();
+		int expirationToken = 3600000; // 1 hour
 
-    public Authentication validateToken(String token) {
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+		try {
+			expirationToken = Integer.parseInt(expiration);
+		} catch (NumberFormatException e) {
+		}
 
-        JWTVerifier verifier = JWT.require(algorithm)
-                .build();
+		Date validity = new Date(now.getTime() + expirationToken);
 
-        DecodedJWT decoded = verifier.verify(token);
+		Algorithm algorithm = Algorithm.HMAC256(secretKey);
+		return JWT.create().withSubject(user.getLogin()).withIssuedAt(now).withExpiresAt(validity)
+				.withClaim("id", user.getId().toString()).withClaim("firstName", user.getFirstName())
+				.withClaim("lastName", user.getLastName()).sign(algorithm);
+	}
 
-        UserDTO user = new UserDTO(UUID.fromString(decoded.getClaim("id").asString()), 
-        						   decoded.getSubject(), 
-        						   decoded.getClaim("firstName").asString(), 
-        						   decoded.getClaim("lastName").asString());
+	public Authentication validateToken(String token) {
+		Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
-        return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
-    }
+		JWTVerifier verifier = JWT.require(algorithm).build();
 
-    public Authentication validateTokenStrongly(String token) {
-        Algorithm algorithm = Algorithm.HMAC256(secretKey);
+		DecodedJWT decoded = verifier.verify(token);
 
-        JWTVerifier verifier = JWT.require(algorithm)
-                .build();
+		UserDTO user = new UserDTO(UUID.fromString(decoded.getClaim("id").asString()), decoded.getSubject(),
+				decoded.getClaim("firstName").asString(), decoded.getClaim("lastName").asString());
 
-        DecodedJWT decoded = verifier.verify(token);
+		return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
+	}
 
-        UserDTO user = userService.findByLogin(decoded.getSubject());
+	public Authentication validateTokenStrongly(String token) {
+		Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
-        return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
-    }
-    /*
-    @Bean
-    SecurityWebFilterChain logout(ServerHttpSecurity http) throws Exception {
-        DelegatingServerLogoutHandler logoutHandler = new DelegatingServerLogoutHandler(
-                new SecurityContextServerLogoutHandler(), new WebSessionServerLogoutHandler()
-        );
+		JWTVerifier verifier = JWT.require(algorithm).build();
 
-        http
-            .authorizeExchange((exchange) -> exchange.anyExchange().authenticated())
-            .logout((logout) -> logout.logoutHandler(logoutHandler));
+		DecodedJWT decoded = verifier.verify(token);
 
-        return http.build();
-    }*/
-
+		return new UsernamePasswordAuthenticationToken(new UserDTO(userService.findByLogin(decoded.getSubject())), null, Collections.emptyList());
+	}
 }

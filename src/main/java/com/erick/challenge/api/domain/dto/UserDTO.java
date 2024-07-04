@@ -1,16 +1,14 @@
 package com.erick.challenge.api.domain.dto;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import com.erick.challenge.api.domain.Car;
 import com.erick.challenge.api.domain.User;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -32,7 +30,7 @@ public class UserDTO {
 		this.createdAt = user.getCreatedAt();
 		this.lastLogin = user.getLastLogin();
 	}
-	
+
 	public UserDTO(User user, List<Car> cars) {
 		super();
 		this.id = user.getId();
@@ -47,15 +45,13 @@ public class UserDTO {
 		this.lastLogin = user.getLastLogin();
 		this.cars = cars;
 	}
-
-	public UserDTO(UUID id,  String login, String firstName, String lastName) {
+	public UserDTO(UUID id, String login, String firstName, String lastName) {
 		super();
 		this.id = id;
 		this.login = login;
 		this.firstName = firstName;
 		this.lastName = lastName;
 	}
-
 	private UUID id;
 	private String firstName;
 	private String lastName;
@@ -67,6 +63,12 @@ public class UserDTO {
 	private LocalDate createdAt;
 	private LocalDate lastLogin;
 	private List<Car> cars;
-    private String token;
+	private String token;
+
+	public boolean validate() {
+		return Objects.nonNull(birthday) && Objects.nonNull(firstName) && Objects.nonNull(email)
+				&& Objects.nonNull(login) && Objects.nonNull(password) && Objects.nonNull(phone)
+				&& Objects.nonNull(lastName);
+	}
 
 }

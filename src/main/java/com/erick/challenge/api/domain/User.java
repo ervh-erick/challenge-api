@@ -1,8 +1,6 @@
 package com.erick.challenge.api.domain;
 
-import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 import com.erick.challenge.api.domain.dto.UserDTO;
@@ -12,7 +10,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;

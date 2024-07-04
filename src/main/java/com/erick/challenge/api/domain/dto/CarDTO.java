@@ -1,5 +1,6 @@
 package com.erick.challenge.api.domain.dto;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import com.erick.challenge.api.domain.Car;
@@ -29,4 +30,11 @@ public class CarDTO {
 	private String color;
 	@JsonIgnore
 	private User user;
+	
+	 public boolean validate() {
+			return Objects.nonNull(color)
+					&& Objects.nonNull(year)
+					&& Objects.nonNull(model)
+					&& Objects.nonNull(licensePlate);
+		}
 }

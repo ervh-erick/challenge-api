@@ -1,15 +1,15 @@
 package com.erick.challenge.api.services;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.erick.challenge.api.domain.Car;
-import com.erick.challenge.api.domain.User;
 import com.erick.challenge.api.domain.dto.CarDTO;
-import com.erick.challenge.api.domain.dto.UserDTO;
+import com.erick.challenge.api.exceptions.AppGenericException;
+import com.erick.challenge.api.exceptions.RecordNotFoundException;
 import com.erick.challenge.api.repositories.CarRepository;
 
 import lombok.AllArgsConstructor;
@@ -22,33 +22,39 @@ public class CarService {
 	UserService userService;
 
 	public Car create(CarDTO objDTO) {
+		if (!objDTO.validate())
+			throw new AppGenericException("Missing fields", HttpStatus.BAD_REQUEST);
+
+		if (!carRepository.findByLicensePlate(objDTO.getLicensePlate()).isEmpty())
+			throw new AppGenericException("License plate already exists", HttpStatus.BAD_REQUEST);
+
 		objDTO.setId(null);
 		objDTO.setUser(userService.findById(userService.getIdUserByContext()));
-		Car newCar = new Car(objDTO);
-		return carRepository.save(newCar);
+		return carRepository.save(new Car(objDTO));
 	}
-	
+
 	public List<Car> findAll() {
 		return carRepository.findCarByUserId(userService.getIdUserByContext());
 	}
 
 	public Car findById(UUID id) {
-		Optional<Car> obj = carRepository.findByIdAndByUserId(id, userService.getIdUserByContext());
-		return obj.get();
-	}
-	
-	public void delete(UUID id) {
-		carRepository.deleteById(id);
-	}
-	
-	public Car update(UUID id, CarDTO objDTO) {
-		objDTO.setId(id);
-		Car updatedObj = findById(id);
-		updatedObj = new Car(objDTO);
-		User user = userService.findById(userService.getIdUserByContext());
-		updatedObj.setUser(user);
-		return carRepository.save(updatedObj);
+		return carRepository.findByIdAndByUserId(id, userService.getIdUserByContext())
+				.orElseThrow(() -> new RecordNotFoundException("Record not found by id: " + id));
 	}
 
-	
+	public void delete(UUID id) {
+		carRepository.delete(carRepository.findByIdAndByUserId(id, userService.getIdUserByContext())
+				.orElseThrow(() -> new RecordNotFoundException("Record not found by id: " + id)));
+	}
+
+	public Car update(UUID id, CarDTO objDTO) {
+		return carRepository.findById(id).map(carFound -> {
+			carFound.setColor(objDTO.getColor());
+			carFound.setModel(objDTO.getModel());
+			carFound.setModel(objDTO.getModel());
+			carFound.setYear(objDTO.getYear());
+			return carRepository.save(carFound);
+		}).orElseThrow(() -> new RecordNotFoundException("Record not found by id: " + id));
+
+	}
 }
