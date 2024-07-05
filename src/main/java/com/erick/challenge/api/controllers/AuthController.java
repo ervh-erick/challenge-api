@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.erick.challenge.api.config.UserAuthenticationProvider;
+import com.erick.challenge.api.domain.User;
 import com.erick.challenge.api.domain.dto.CredentialsDTO;
 import com.erick.challenge.api.domain.dto.UserDTO;
 import com.erick.challenge.api.services.UserService;
@@ -34,7 +35,11 @@ public class AuthController {
 	@GetMapping(value = "/me")
 	public ResponseEntity<UserDTO> getUserLoggedin() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UserDTO userDTO = userService.getMe(((UserDTO) auth.getPrincipal()).getLogin());
-		return ResponseEntity.ok(userDTO);
+		if (auth.getPrincipal() instanceof User) {
+			return ResponseEntity.ok(userService.getMe(((User)(auth.getPrincipal())).getLogin()));
+		}else if (auth.getPrincipal() instanceof UserDTO) {
+			return ResponseEntity.ok(userService.getMe(((UserDTO)(auth.getPrincipal())).getLogin()));
+		}
+		return null;
 	}
 }

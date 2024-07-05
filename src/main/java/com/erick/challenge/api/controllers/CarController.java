@@ -32,12 +32,12 @@ public class CarController {
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public CarDTO create(@RequestBody @Valid CarDTO objDTO) {
-		return new CarDTO(carService.create(objDTO));
+		return carService.create(objDTO);
 	}
 
 	@GetMapping
 	public List<CarDTO> findAll() {
-		return carService.findAll().stream().map(obj -> new CarDTO(obj)).collect(Collectors.toList());
+		return carService.findAll();
 	}
 
 	@GetMapping(value = "/{id}")
@@ -53,7 +53,7 @@ public class CarController {
 
 	@PutMapping(value = "/{id}")
 	public CarDTO update(@PathVariable UUID id, @RequestBody CarDTO objDTO) {
-		return new CarDTO(carService.update(id, objDTO));
+		return carService.update(id, objDTO);
 	}
 
 }

@@ -35,6 +35,11 @@ public class User {
 		this.lastLogin = objDTO.getLastLogin();
 	}
 
+	public User(UUID id, String login) {
+		this.id = id;
+		this.login = login;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;

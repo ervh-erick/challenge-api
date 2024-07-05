@@ -63,8 +63,7 @@ public class UserAuthenticationProvider {
 
 		DecodedJWT decoded = verifier.verify(token);
 
-		UserDTO user = new UserDTO(UUID.fromString(decoded.getClaim("id").asString()), decoded.getSubject(),
-				decoded.getClaim("firstName").asString(), decoded.getClaim("lastName").asString());
+		User user = new User(UUID.fromString(decoded.getClaim("id").asString()), decoded.getSubject());
 
 		return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
 	}
@@ -76,6 +75,6 @@ public class UserAuthenticationProvider {
 
 		DecodedJWT decoded = verifier.verify(token);
 
-		return new UsernamePasswordAuthenticationToken(new UserDTO(userService.findByLogin(decoded.getSubject())), null, Collections.emptyList());
+		return new UsernamePasswordAuthenticationToken(userService.findByLogin(decoded.getSubject()), null, Collections.emptyList());
 	}
 }
