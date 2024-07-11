@@ -31,17 +31,17 @@ public class UserController {
 
 	@GetMapping
 	public List<UserDTO> findAll() {
-		return userService.findAll().stream().map(obj -> new UserDTO(obj)).collect(Collectors.toList());
+		return userService.findAll();
 	}
 
 	@GetMapping(value = "/{id}")
-	public User findById(@PathVariable UUID id) {
+	public UserDTO findById(@PathVariable UUID id) {
 		return userService.findById(id);
 	}
 
 	@PutMapping(value = "/{id}")
 	public UserDTO update(@PathVariable UUID id, @RequestBody UserDTO objDTO) {
-		return new UserDTO(userService.update(id, objDTO));
+		return userService.update(id, objDTO);
 	}
 
 	@DeleteMapping(value = "/{id}")
@@ -53,7 +53,7 @@ public class UserController {
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public UserDTO create(@RequestBody @Valid UserDTO objDTO) {
-		return new UserDTO(userService.create(objDTO));
+		return userService.create(objDTO);
 	}
 
 }

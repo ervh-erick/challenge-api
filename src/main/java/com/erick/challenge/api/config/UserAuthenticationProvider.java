@@ -15,7 +15,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.erick.challenge.api.domain.User;
 import com.erick.challenge.api.domain.dto.UserDTO;
 import com.erick.challenge.api.services.UserService;
 
@@ -63,8 +62,7 @@ public class UserAuthenticationProvider {
 
 		DecodedJWT decoded = verifier.verify(token);
 
-		UserDTO user = new UserDTO(UUID.fromString(decoded.getClaim("id").asString()), decoded.getSubject(),
-				decoded.getClaim("firstName").asString(), decoded.getClaim("lastName").asString());
+		UserDTO user = new UserDTO(UUID.fromString(decoded.getClaim("id").asString()), decoded.getSubject());
 
 		return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
 	}
@@ -76,6 +74,7 @@ public class UserAuthenticationProvider {
 
 		DecodedJWT decoded = verifier.verify(token);
 
-		return new UsernamePasswordAuthenticationToken(new UserDTO(userService.findByLogin(decoded.getSubject())), null, Collections.emptyList());
+		return new UsernamePasswordAuthenticationToken(userService.findByLogin(decoded.getSubject()), null,
+				Collections.emptyList());
 	}
 }
