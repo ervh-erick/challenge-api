@@ -1,9 +1,10 @@
-package com.erick.challenge.api.domain;
+package com.erick.challenge.api.domain.model;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 import com.erick.challenge.api.domain.dto.UserDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,21 +22,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "users")
+@Builder
 public class User {
-
-	public User(UserDTO objDTO) {
-		this.id = objDTO.getId();
-		this.firstName = objDTO.getFirstName();
-		this.lastName = objDTO.getLastName();
-		this.email = objDTO.getEmail();
-		this.birthday = objDTO.getBirthday();
-		this.login = objDTO.getLogin();
-		this.password = objDTO.getPassword();
-		this.phone = objDTO.getPhone();
-		this.createdAt = objDTO.getCreatedAt();
-		this.lastLogin = objDTO.getLastLogin();
-	}
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;

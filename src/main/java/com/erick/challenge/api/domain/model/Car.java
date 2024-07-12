@@ -1,4 +1,4 @@
-package com.erick.challenge.api.domain;
+package com.erick.challenge.api.domain.model;
 
 import java.util.UUID;
 
@@ -18,6 +18,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,17 +27,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "car")
+@Builder
 public class Car {
-
-	public Car(CarDTO carDTO) {
-		this.id = carDTO.getId();
-		this.year = carDTO.getYear();
-		this.licensePlate = carDTO.getLicensePlate();
-		this.model = carDTO.getModel();
-		this.color = carDTO.getColor();
-		this.user = carDTO.getUser();
-
-	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

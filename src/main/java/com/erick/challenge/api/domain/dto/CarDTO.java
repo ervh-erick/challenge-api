@@ -3,8 +3,7 @@ package com.erick.challenge.api.domain.dto;
 import java.util.Objects;
 import java.util.UUID;
 
-import com.erick.challenge.api.domain.Car;
-import com.erick.challenge.api.domain.User;
+import com.erick.challenge.api.domain.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -15,13 +14,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CarDTO {
-	public CarDTO(Car newObj) {
-		this.id = newObj.getId();
-		this.color = newObj.getColor();
-		this.year = newObj.getYear();
-		this.model = newObj.getModel();
-		this.licensePlate = newObj.getLicensePlate();
-	}
 
 	private UUID id;
 	private int year;
@@ -30,11 +22,9 @@ public class CarDTO {
 	private String color;
 	@JsonIgnore
 	private User user;
-	
-	 public boolean validate() {
-			return Objects.nonNull(color)
-					&& Objects.nonNull(year)
-					&& Objects.nonNull(model)
-					&& Objects.nonNull(licensePlate);
-		}
+
+	public boolean validate() {
+		return Objects.nonNull(color) && Objects.nonNull(year) && Objects.nonNull(model)
+				&& Objects.nonNull(licensePlate);
+	}
 }

@@ -1,4 +1,4 @@
-package com.erick.challenge.api.domain;
+package com.erick.challenge.api.domain.model;
 
 import lombok.Builder;
 

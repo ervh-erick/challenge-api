@@ -22,6 +22,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        var context = SecurityContextHolder.createEmptyContext();
+
 
         if (header != null) {
             String[] authElements = header.split(" ");
@@ -29,7 +31,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             if (authElements.length == 2
                     && "Bearer".equals(authElements[0])) {
                 try {
+                	SecurityContextHolder.setContext(context);
                     if ("GET".equals(request.getMethod())) {
+                    	
                         SecurityContextHolder.getContext().setAuthentication(
                                 userAuthenticationProvider.validateToken(authElements[1]));
                     } else {

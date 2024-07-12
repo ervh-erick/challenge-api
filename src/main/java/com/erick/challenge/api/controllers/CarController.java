@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.erick.challenge.api.domain.Car;
 import com.erick.challenge.api.domain.dto.CarDTO;
+import com.erick.challenge.api.domain.model.Car;
 import com.erick.challenge.api.services.CarService;
 
 import jakarta.validation.Valid;
@@ -32,16 +32,16 @@ public class CarController {
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public CarDTO create(@RequestBody @Valid CarDTO objDTO) {
-		return new CarDTO(carService.create(objDTO));
+		return carService.create(objDTO);
 	}
 
 	@GetMapping
 	public List<CarDTO> findAll() {
-		return carService.findAll().stream().map(obj -> new CarDTO(obj)).collect(Collectors.toList());
+		return carService.findAll();
 	}
 
 	@GetMapping(value = "/{id}")
-	public Car findById(@PathVariable UUID id) {
+	public CarDTO findById(@PathVariable UUID id) {
 		return carService.findById(id);
 	}
 
@@ -53,7 +53,7 @@ public class CarController {
 
 	@PutMapping(value = "/{id}")
 	public CarDTO update(@PathVariable UUID id, @RequestBody CarDTO objDTO) {
-		return new CarDTO(carService.update(id, objDTO));
+		return carService.update(id, objDTO);
 	}
 
 }
