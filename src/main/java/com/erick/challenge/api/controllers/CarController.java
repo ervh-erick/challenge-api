@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.erick.challenge.api.domain.Car;
 import com.erick.challenge.api.domain.dto.CarDTO;
+import com.erick.challenge.api.domain.model.Car;
 import com.erick.challenge.api.services.CarService;
 
 import jakarta.validation.Valid;

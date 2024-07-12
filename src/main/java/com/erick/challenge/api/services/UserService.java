@@ -14,10 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.erick.challenge.api.config.UserAuthenticationProvider;
-import com.erick.challenge.api.domain.User;
 import com.erick.challenge.api.domain.dto.CredentialsDTO;
 import com.erick.challenge.api.domain.dto.UserDTO;
 import com.erick.challenge.api.domain.mapper.UserMapper;
+import com.erick.challenge.api.domain.model.User;
 import com.erick.challenge.api.exceptions.AppGenericException;
 import com.erick.challenge.api.exceptions.RecordNotFoundException;
 import com.erick.challenge.api.repositories.CarRepository;

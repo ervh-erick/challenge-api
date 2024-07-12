@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import com.erick.challenge.api.domain.Car;
+import com.erick.challenge.api.domain.model.Car;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

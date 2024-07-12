@@ -7,10 +7,10 @@ import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.erick.challenge.api.domain.User;
 import com.erick.challenge.api.domain.dto.CarDTO;
 import com.erick.challenge.api.domain.mapper.CarMapper;
 import com.erick.challenge.api.domain.mapper.UserMapper;
+import com.erick.challenge.api.domain.model.User;
 import com.erick.challenge.api.exceptions.AppGenericException;
 import com.erick.challenge.api.exceptions.RecordNotFoundException;
 import com.erick.challenge.api.repositories.CarRepository;

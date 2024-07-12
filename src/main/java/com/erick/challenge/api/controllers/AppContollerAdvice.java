@@ -4,7 +4,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.erick.challenge.api.domain.ApiError;
+import com.erick.challenge.api.domain.model.ApiError;
 import com.erick.challenge.api.exceptions.AppGenericException;
 import com.erick.challenge.api.exceptions.RecordNotFoundException;
 

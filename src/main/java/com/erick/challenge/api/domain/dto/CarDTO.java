@@ -3,7 +3,7 @@ package com.erick.challenge.api.domain.dto;
 import java.util.Objects;
 import java.util.UUID;
 
-import com.erick.challenge.api.domain.User;
+import com.erick.challenge.api.domain.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
